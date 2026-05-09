@@ -251,9 +251,6 @@ export function Tutorial({ onComplete }: TutorialProps) {
             boxShadow: `0 24px 64px rgba(0,0,0,0.7), 0 0 0 1px ${current.color}22`,
             overflow: 'hidden',
             opacity: visible ? 1 : 0,
-            transform: cardPos
-              ? (visible ? 'translateY(0) scale(1)' : 'translateY(8px) scale(0.98)')
-              : (visible ? 'translate(-50%,-50%) scale(1)' : 'translate(-50%,-50%) scale(0.97)'),
             transition: 'opacity 0.2s ease, transform 0.2s ease, top 0.3s cubic-bezier(0.4,0,0.2,1), left 0.3s cubic-bezier(0.4,0,0.2,1)',
             ...mono,
           }}

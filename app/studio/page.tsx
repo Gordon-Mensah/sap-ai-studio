@@ -15,6 +15,7 @@ import { RunPanel } from '@/components/RunPanel'
 import { TopBar } from '@/components/TopBar'
 import { SaveModal } from '@/components/SaveModal'
 import { ApiKeyModal } from '@/components/ApiKeyModal'
+import { Tutorial } from '@/components/Tutorial'
 import { PipelineStep } from '@/lib/pipeline-engine'
 import { savePipeline, updatePipeline, saveRun } from '@/lib/storage'
 import { getApiKey, hasApiKey } from '@/lib/api-key'
@@ -46,6 +47,7 @@ function OrchestratorCanvas() {
   const [saveModalOpen, setSaveModalOpen] = useState(false)
   const [apiKeyModalOpen, setApiKeyModalOpen] = useState(false)
   const [isFirstTime, setIsFirstTime] = useState(false)
+  const [showTutorial, setShowTutorial] = useState(false)
   const [currentPipelineId, setCurrentPipelineId] = useState<string | null>(null)
   const [currentPipelineName, setCurrentPipelineName] = useState<string>('')
   const [saveToast, setSaveToast] = useState<string | null>(null)
@@ -89,6 +91,10 @@ function OrchestratorCanvas() {
     if (!hasApiKey()) {
       setIsFirstTime(true)
       setApiKeyModalOpen(true)
+    }
+    // Show tutorial on first visit
+    if (!localStorage.getItem('sap_studio_toured')) {
+      setTimeout(() => setShowTutorial(true), 800)
     }
   }, [])
 
@@ -236,6 +242,7 @@ runPipeline("Your input here").then(console.log)`
         }}
         onExportCode={generateCode}
         onManageKey={() => { setIsFirstTime(false); setApiKeyModalOpen(true) }}
+          onTour={() => setShowTutorial(true)}
       />
 
       <div className="flex flex-1 overflow-hidden">
@@ -282,6 +289,10 @@ runPipeline("Your input here").then(console.log)`
           onSave={handleSave}
           onClose={() => setSaveModalOpen(false)}
         />
+      )}
+
+      {showTutorial && (
+        <Tutorial onComplete={() => setShowTutorial(false)} />
       )}
 
       {apiKeyModalOpen && (

@@ -12,9 +12,10 @@ interface TopBarProps {
   onClear: () => void
   onExportCode: () => void
   onManageKey: () => void
+  onTour: () => void
 }
 
-export function TopBar({ nodeCount, pipelineName, onRun, onSave, onSaveAs, onClear, onExportCode, onManageKey }: TopBarProps) {
+export function TopBar({ nodeCount, pipelineName, onRun, onSave, onSaveAs, onClear, onExportCode, onManageKey, onTour }: TopBarProps) {
   const router = useRouter()
   const [keySet, setKeySet] = useState(false)
 
@@ -105,6 +106,13 @@ export function TopBar({ nodeCount, pipelineName, onRun, onSave, onSaveAs, onCle
           onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#FF4444'; e.currentTarget.style.color = '#FF4444' }}
           onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#1A2333'; e.currentTarget.style.color = '#3A4A60' }}>
           Clear
+        </button>
+        <button onClick={onTour} title="Take the tour"
+          className="text-xs w-7 h-7 flex items-center justify-center rounded transition-colors"
+          style={{ background: 'transparent', border: '1px solid #1A2333', color: '#3A4A60' }}
+          onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#0070F3'; e.currentTarget.style.color = '#0070F3' }}
+          onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#1A2333'; e.currentTarget.style.color = '#3A4A60' }}>
+          ?
         </button>
         <button onClick={onRun} disabled={nodeCount === 0}
           className="text-xs px-4 py-1.5 rounded font-semibold transition-all disabled:opacity-30 disabled:cursor-not-allowed"

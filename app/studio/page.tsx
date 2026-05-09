@@ -244,7 +244,7 @@ runPipeline("Your input here").then(console.log)`
       <div className="flex flex-1 overflow-hidden">
         <NodePalette onAddNode={addNode} />
 
-        <div ref={reactFlowWrapper} className="flex-1 relative">
+        <div ref={reactFlowWrapper} data-tour="canvas" className="flex-1 relative">
           <ReactFlow
             nodes={nodes} edges={edges}
             onNodesChange={onNodesChange} onEdgesChange={onEdgesChange}

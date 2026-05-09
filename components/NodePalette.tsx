@@ -27,7 +27,7 @@ const NODE_TYPES: {
 
 export function NodePalette({ onAddNode }: NodePaletteProps) {
   return (
-    <div className="w-56 flex flex-col border-r overflow-y-auto"
+    <div data-tour="palette" className="w-56 flex flex-col border-r overflow-y-auto"
       style={{ background: '#090D1A', borderColor: '#1A2333', fontFamily: "'IBM Plex Mono', monospace" }}>
       <div className="px-4 py-3 border-b" style={{ borderColor: '#1A2333' }}>
         <p className="text-xs tracking-[0.2em] uppercase" style={{ color: '#3A4A60' }}>Pipeline Modules</p>

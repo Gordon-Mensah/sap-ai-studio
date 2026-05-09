@@ -1,23 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #080B14;
+  --foreground: #ffffff;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'IBM Plex Mono', monospace;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* ReactFlow overrides */
+.react-flow__renderer {
+  background: #080B14 !important;
+}
+
+.react-flow__controls button {
+  background: #111827 !important;
+  border-color: #1E2B3C !important;
+  color: #3A5A70 !important;
+  fill: #3A5A70 !important;
+}
+
+.react-flow__controls button:hover {
+  background: #1A2535 !important;
+  color: #00D4AA !important;
+  fill: #00D4AA !important;
+}
+
+.react-flow__attribution {
+  display: none !important;
+}
+
+.react-flow__edge-path {
+  stroke-linecap: round;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #090D1A;
+}
+::-webkit-scrollbar-thumb {
+  background: #1A2535;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2A3A50;
 }
 
 @layer utilities {

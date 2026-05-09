@@ -109,7 +109,7 @@ export default function LandingPage() {
         {/* Pipeline demo */}
         <div style={{ background: '#090D1A', border: '1px solid #1A2333', borderRadius: 12, padding: '28px 24px', maxWidth: 640, margin: '0 auto' }}>
           <p style={{ fontSize: 10, color: '#2A3A50', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 20 }}>Example pipeline</p>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 0, justifyContent: 'center', flexWrap: 'wrap', gap: 4 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: 4 }}>
             {PIPELINE_DEMO.map((node, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                 <div style={{ padding: '10px 14px', borderRadius: 8, background: node.color + '15', border: `1px solid ${node.color}44`, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, minWidth: 90 }}>

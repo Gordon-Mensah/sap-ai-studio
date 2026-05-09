@@ -172,13 +172,13 @@ function OrchestratorCanvas() {
     }
   }, [nodes, edges, getOrderedSteps, currentPipelineId, currentPipelineName])
 
-  const handleSave = useCallback((name: string, description: string, tags: string[]) => {
+  const handleSave = useCallback(async (name: string, description: string, tags: string[]) => {
     if (currentPipelineId) {
       updatePipeline(currentPipelineId, { name, description, tags, nodes, edges })
       setCurrentPipelineName(name)
       showToast(`✓ "${name}" updated`)
     } else {
-      const saved = savePipeline({ name, description, tags, nodes, edges })
+      const saved = await savePipeline({ name, description, tags, nodes, edges })
       setCurrentPipelineId(saved.id)
       setCurrentPipelineName(name)
       showToast(`✓ "${name}" saved`)

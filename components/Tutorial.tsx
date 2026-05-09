@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 interface TutorialProps {
   onComplete: () => void
@@ -8,267 +8,214 @@ interface TutorialProps {
 
 const STEPS = [
   {
-    id: 'welcome',
-    title: 'Welcome to SAP AI Orchestration Studio',
-    body: 'This is a visual AI pipeline builder inspired by SAP\'s AI Foundation Orchestration Service. You connect modules together to build AI workflows — no code required. This tour takes about 60 seconds.',
+    title: 'You\'re all set.',
+    subtitle: 'Here\'s how the studio works',
+    body: 'SAP AI Orchestration Studio lets you build AI pipelines visually — no code needed. You connect modules together and run them with real LLM calls. This tour covers the five things you need to know.',
     icon: '⬡',
     color: '#0070F3',
-    target: null,
-    position: 'center',
+    tag: 'Welcome',
   },
   {
-    id: 'palette',
-    title: 'The Module Palette',
-    body: 'On the left you have 9 pipeline modules — Prompt Template, LLM Call, Grounding, Data Masking, Content Filter, Translation, Summariser, Sentiment, and JSON Parser. Click any module to add it to the canvas. Each one maps to a real SAP Orchestration Service concept.',
-    icon: '⬡',
+    title: 'Add modules from the left panel.',
+    subtitle: 'The Module Palette',
+    body: 'Click any module on the left to add it to the canvas. You have 9 to choose from — LLM Call, Prompt Template, Grounding, Data Masking, Content Filter, Translation, Summariser, Sentiment, and JSON Parser. Each one maps to a real concept in SAP\'s AI Foundation course.',
+    icon: '[ ]',
     color: '#0070F3',
-    target: 'palette',
-    position: 'right',
-    highlight: { left: 0, top: 56, width: 224, bottom: 0 },
+    tag: 'Step 1',
+    tip: 'Try adding a Prompt Template → LLM Call to start.',
   },
   {
-    id: 'canvas',
-    title: 'The Pipeline Canvas',
-    body: 'Nodes you add appear on this canvas. Drag them to reposition. Connect them by dragging from the right handle (output) of one node to the left handle (input) of the next. The order they\'re connected is the order they execute.',
+    title: 'Connect nodes to build a pipeline.',
+    subtitle: 'The Canvas',
+    body: 'Drag from the right side of one node to the left side of the next. That connection defines the execution order — output from one step becomes input to the next. Click any node to configure it in the right panel.',
     icon: '◈',
     color: '#00D4AA',
-    target: 'canvas',
-    position: 'center',
+    tag: 'Step 2',
+    tip: 'Nodes execute left to right in the order you connect them.',
   },
   {
-    id: 'config',
-    title: 'Configure Any Node',
-    body: 'Click any node on the canvas to open its configuration panel on the right. You can set the system prompt for LLM nodes, define template variables, set a target language for translation, upload a grounding document, and more.',
-    icon: '◫',
-    color: '#F59E0B',
-    target: null,
-    position: 'center',
-  },
-  {
-    id: 'run',
-    title: 'Run Your Pipeline',
-    body: 'Click the ▶ Run button in the top bar, type your input text, and hit Execute. Each step runs in sequence — you\'ll see live streaming output for LLM steps. The result panel shows input → output for every step so you can debug exactly what happened.',
+    title: 'Type your input and hit Execute.',
+    subtitle: 'Running the Pipeline',
+    body: 'Click ▶ Run in the top bar, type your input text, and press Execute. Each step runs in sequence. For LLM steps you\'ll see tokens stream in live. The result panel shows the exact input and output for every step so you can see what happened at each stage.',
     icon: '▶',
     color: '#00D4AA',
-    target: 'topbar',
-    position: 'bottom',
-    highlight: { top: 0, left: 0, right: 0, height: 56 },
+    tag: 'Step 3',
+    tip: 'Stream mode is on by default — uncheck it for faster batch runs.',
   },
   {
-    id: 'templates',
-    title: '12 Enterprise Templates',
-    body: 'Don\'t want to build from scratch? Click Templates in the top bar. You\'ll find 12 pre-built pipelines across 10 categories — customer support, legal analysis, CV screening, GDPR compliance, invoice extraction, sentiment analysis, and more. One click loads them onto the canvas.',
+    title: 'Load a template to skip the setup.',
+    subtitle: 'Enterprise Templates',
+    body: 'Click Templates in the top bar to browse 12 pre-built pipelines — customer support triage, legal clause analysis, CV screening, GDPR compliance, invoice extraction, and more. One click loads the full pipeline onto the canvas, ready to run.',
     icon: '⊞',
     color: '#A78BFA',
-    target: null,
-    position: 'center',
+    tag: 'Step 4',
+    tip: 'Templates are a good way to see how complex pipelines are structured.',
   },
   {
-    id: 'save',
-    title: 'Save & Reload Pipelines',
-    body: 'Click Save (↑) in the top bar to name your pipeline, add a description and tags. It saves to localStorage immediately — no account needed. If you\'ve set up Supabase, it syncs to the cloud too. Load any saved pipeline from the History page.',
+    title: 'Save your work. Come back to it.',
+    subtitle: 'Saving & History',
+    body: 'Click Save (↑) to name your pipeline and add tags. It saves instantly to your browser — no account needed. Every run is logged in the History page with the full step trace, timing, and output. You can reload any saved pipeline with one click.',
     icon: '↑',
     color: '#10B981',
-    target: null,
-    position: 'center',
-  },
-  {
-    id: 'compare',
-    title: 'Model Comparison',
-    body: 'Click Compare in the top bar to open a side-by-side model comparison page. Run the same prompt against LLaMA 70B, LLaMA 8B, Qwen, and Gemma simultaneously. See speed and quality differences at a glance — useful for picking the right model for your pipeline.',
-    icon: '⇌',
-    color: '#F97316',
-    target: null,
-    position: 'center',
-  },
-  {
-    id: 'apikey',
-    title: 'API Key',
-    body: 'The studio uses Groq to run your LLM steps. Your API key is stored locally in your browser — it\'s never sent to our servers, only directly to Groq. Get a free key at console.groq.com. You can update your key anytime from the top bar.',
-    icon: '🔑',
-    color: '#F59E0B',
-    target: null,
-    position: 'center',
-  },
-  {
-    id: 'done',
-    title: 'You\'re ready.',
-    body: 'Start by clicking any module in the left palette to add it to the canvas. Connect two or three nodes, hit Run, and watch your pipeline execute. If you ever want to see this tour again, click the ? button in the top bar.',
-    icon: '✓',
-    color: '#00D4AA',
-    target: null,
-    position: 'center',
+    tag: 'Step 5',
+    tip: 'Use the Compare page to run the same prompt on two models side by side.',
   },
 ]
 
 export function Tutorial({ onComplete }: TutorialProps) {
   const [step, setStep] = useState(0)
-  const [animating, setAnimating] = useState(false)
+  const [exiting, setExiting] = useState(false)
 
   const current = STEPS[step]
   const isLast = step === STEPS.length - 1
   const progress = ((step + 1) / STEPS.length) * 100
 
-  const go = (dir: 1 | -1) => {
-    if (animating) return
-    setAnimating(true)
-    setTimeout(() => {
-      setStep(s => Math.max(0, Math.min(STEPS.length - 1, s + dir)))
-      setAnimating(false)
-    }, 150)
+  const next = () => {
+    if (isLast) { finish(); return }
+    setStep(s => s + 1)
   }
+
+  const back = () => setStep(s => Math.max(0, s - 1))
 
   const finish = () => {
+    setExiting(true)
     localStorage.setItem('sap_studio_toured', '1')
-    onComplete()
-  }
-
-  const skip = () => {
-    localStorage.setItem('sap_studio_toured', '1')
-    onComplete()
+    setTimeout(onComplete, 200)
   }
 
   const mono = { fontFamily: "'IBM Plex Mono', monospace" }
 
   return (
-    <>
-      {/* Backdrop */}
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 200,
+      background: 'rgba(4,6,12,0.82)',
+      backdropFilter: 'blur(6px)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      opacity: exiting ? 0 : 1,
+      transition: 'opacity 0.2s ease',
+      ...mono,
+    }}>
       <div style={{
-        position: 'fixed', inset: 0, zIndex: 200,
-        background: 'rgba(4, 6, 12, 0.88)',
-        backdropFilter: 'blur(3px)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        width: '100%', maxWidth: 480,
+        background: '#0A0E1A',
+        border: `1px solid #1E2B3C`,
+        borderRadius: 14,
+        overflow: 'hidden',
+        boxShadow: '0 32px 80px rgba(0,0,0,0.7)',
       }}>
 
-        {/* Highlight box for palette step */}
-        {current.id === 'palette' && (
+        {/* Progress bar */}
+        <div style={{ height: 2, background: '#111827' }}>
           <div style={{
-            position: 'fixed', left: 0, top: 56, width: 224, bottom: 0,
-            border: '2px solid #0070F3',
-            boxShadow: '0 0 0 4px #0070F322, inset 0 0 40px #0070F311',
-            borderRadius: 0, pointerEvents: 'none', zIndex: 201,
-            animation: 'tutorialPulse 2s ease-in-out infinite',
+            height: '100%',
+            width: `${progress}%`,
+            background: `linear-gradient(90deg, #0070F3, #00D4AA)`,
+            transition: 'width 0.35s cubic-bezier(0.4,0,0.2,1)',
           }} />
-        )}
+        </div>
 
-        {/* Highlight box for topbar step */}
-        {current.id === 'run' && (
-          <div style={{
-            position: 'fixed', left: 0, top: 0, right: 0, height: 56,
-            border: '2px solid #00D4AA',
-            boxShadow: '0 0 0 4px #00D4AA22, inset 0 0 40px #00D4AA11',
-            pointerEvents: 'none', zIndex: 201,
-            animation: 'tutorialPulse 2s ease-in-out infinite',
-          }} />
-        )}
+        {/* Step tag */}
+        <div style={{ padding: '20px 24px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{
+            fontSize: 10, color: current.color,
+            textTransform: 'uppercase', letterSpacing: '0.18em',
+            padding: '3px 8px', borderRadius: 4,
+            background: current.color + '18',
+            border: `1px solid ${current.color}33`,
+          }}>
+            {current.tag}
+          </span>
+          <button onClick={finish} style={{
+            fontSize: 11, color: '#2A3A50', background: 'transparent',
+            border: 'none', cursor: 'pointer', padding: '2px 6px',
+          }}
+            onMouseEnter={e => (e.currentTarget.style.color = '#5A7A90')}
+            onMouseLeave={e => (e.currentTarget.style.color = '#2A3A50')}>
+            skip
+          </button>
+        </div>
 
-        {/* Card */}
-        <div style={{
-          width: '100%', maxWidth: 520,
-          background: '#0D1420',
-          border: `1px solid ${current.color}44`,
-          borderRadius: 16,
-          overflow: 'hidden',
-          boxShadow: `0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px ${current.color}22`,
-          ...mono,
-          opacity: animating ? 0 : 1,
-          transform: animating ? 'translateY(6px)' : 'translateY(0)',
-          transition: 'opacity 0.15s, transform 0.15s',
-        }}>
+        {/* Content */}
+        <div style={{ padding: '16px 24px 24px' }}>
 
-          {/* Progress bar */}
-          <div style={{ height: 3, background: '#1A2333' }}>
+          {/* Icon + title */}
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14, marginBottom: 14 }}>
             <div style={{
-              height: '100%',
-              width: `${progress}%`,
-              background: `linear-gradient(90deg, #0070F3, ${current.color})`,
-              transition: 'width 0.3s ease',
-            }} />
-          </div>
-
-          {/* Header */}
-          <div style={{ padding: '24px 28px 0', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <div style={{
-                width: 40, height: 40, borderRadius: 10,
-                background: current.color + '20',
-                border: `1px solid ${current.color}44`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 18, color: current.color,
-              }}>
-                {current.icon}
-              </div>
-              <div>
-                <p style={{ fontSize: 10, color: '#3A4A60', textTransform: 'uppercase', letterSpacing: '0.15em', margin: '0 0 4px' }}>
-                  Step {step + 1} of {STEPS.length}
-                </p>
-                <h2 style={{ fontSize: 16, fontWeight: 700, color: '#fff', margin: 0, lineHeight: 1.2 }}>
-                  {current.title}
-                </h2>
-              </div>
+              width: 44, height: 44, borderRadius: 10, flexShrink: 0,
+              background: current.color + '18',
+              border: `1px solid ${current.color}33`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 16, color: current.color, fontWeight: 700,
+            }}>
+              {current.icon}
             </div>
-            <button onClick={skip} style={{ background: 'transparent', border: 'none', color: '#2A3A50', cursor: 'pointer', fontSize: 11, padding: '4px 8px', borderRadius: 4 }}
-              onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
-              onMouseLeave={e => (e.currentTarget.style.color = '#2A3A50')}>
-              skip tour
-            </button>
+            <div>
+              <p style={{ fontSize: 11, color: '#3A4A60', margin: '0 0 5px' }}>{current.subtitle}</p>
+              <h2 style={{ fontSize: 17, fontWeight: 700, color: '#fff', margin: 0, lineHeight: 1.25 }}>
+                {current.title}
+              </h2>
+            </div>
           </div>
 
           {/* Body */}
-          <div style={{ padding: '20px 28px 28px' }}>
-            <p style={{ fontSize: 13, lineHeight: 1.8, color: '#5A7A90', margin: '0 0 28px' }}>
-              {current.body}
-            </p>
+          <p style={{ fontSize: 12.5, lineHeight: 1.8, color: '#4A6A80', margin: '0 0 16px' }}>
+            {current.body}
+          </p>
 
-            {/* Step dots */}
-            <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginBottom: 20 }}>
-              {STEPS.map((_, i) => (
-                <button key={i} onClick={() => setStep(i)} style={{
-                  width: i === step ? 20 : 6,
-                  height: 6, borderRadius: 3,
-                  background: i === step ? current.color : i < step ? current.color + '66' : '#1A2333',
-                  border: 'none', cursor: 'pointer', padding: 0,
-                  transition: 'all 0.2s ease',
-                }} />
-              ))}
+          {/* Tip */}
+          {current.tip && (
+            <div style={{
+              padding: '10px 14px', borderRadius: 8, marginBottom: 20,
+              background: '#0D1420', border: '1px solid #1A2535',
+              display: 'flex', alignItems: 'flex-start', gap: 10,
+            }}>
+              <span style={{ color: '#00D4AA', fontSize: 11, flexShrink: 0, marginTop: 1 }}>→</span>
+              <p style={{ fontSize: 11, color: '#3A5A70', margin: 0, lineHeight: 1.6 }}>{current.tip}</p>
             </div>
+          )}
 
-            {/* Actions */}
-            <div style={{ display: 'flex', gap: 10 }}>
-              {step > 0 && (
-                <button onClick={() => go(-1)} style={{
-                  flex: 1, padding: '11px', borderRadius: 8, fontSize: 12, fontWeight: 600,
-                  background: 'transparent', color: '#3A5A70',
-                  border: '1px solid #1A2333', cursor: 'pointer',
-                  ...mono,
-                }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = '#3A5A70'; e.currentTarget.style.color = '#fff' }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = '#1A2333'; e.currentTarget.style.color = '#3A5A70' }}>
-                  ← Back
-                </button>
-              )}
-              <button onClick={isLast ? finish : () => go(1)} style={{
-                flex: 2, padding: '11px', borderRadius: 8, fontSize: 12, fontWeight: 700,
-                background: isLast ? `linear-gradient(135deg, #0070F3, #00D4AA)` : current.color + '22',
-                color: isLast ? '#fff' : current.color,
-                border: `1px solid ${isLast ? 'transparent' : current.color + '44'}`,
-                cursor: 'pointer', ...mono,
+          {/* Dot navigation */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginBottom: 20 }}>
+            {STEPS.map((_, i) => (
+              <button key={i} onClick={() => setStep(i)} style={{
+                width: i === step ? 18 : 6, height: 6, borderRadius: 3,
+                background: i === step ? current.color : i < step ? '#1E3A4A' : '#131C28',
+                border: 'none', cursor: 'pointer', padding: 0,
+                transition: 'all 0.25s ease',
+              }} />
+            ))}
+          </div>
+
+          {/* Actions */}
+          <div style={{ display: 'flex', gap: 8 }}>
+            {step > 0 && (
+              <button onClick={back} style={{
+                flex: 1, padding: '10px', borderRadius: 7, fontSize: 12,
+                background: 'transparent', color: '#3A5A70',
+                border: '1px solid #1A2535', cursor: 'pointer', ...mono,
               }}
-                onMouseEnter={e => { if (!isLast) e.currentTarget.style.background = current.color + '33' }}
-                onMouseLeave={e => { if (!isLast) e.currentTarget.style.background = current.color + '22' }}>
-                {isLast ? '✓ Start Building' : 'Next →'}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = '#2A3A50'; e.currentTarget.style.color = '#7A9AB0' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = '#1A2535'; e.currentTarget.style.color = '#3A5A70' }}>
+                ← Back
               </button>
-            </div>
+            )}
+            <button onClick={next} style={{
+              flex: 2, padding: '10px', borderRadius: 7, fontSize: 12, fontWeight: 700,
+              background: isLast
+                ? 'linear-gradient(135deg, #0070F3, #00D4AA)'
+                : current.color + '20',
+              color: isLast ? '#fff' : current.color,
+              border: `1px solid ${isLast ? 'transparent' : current.color + '40'}`,
+              cursor: 'pointer', ...mono,
+              transition: 'all 0.15s',
+            }}
+              onMouseEnter={e => { if (!isLast) e.currentTarget.style.background = current.color + '30' }}
+              onMouseLeave={e => { if (!isLast) e.currentTarget.style.background = current.color + '20' }}>
+              {isLast ? '✓  Start Building' : 'Next →'}
+            </button>
           </div>
         </div>
       </div>
-
-      <style>{`
-        @keyframes tutorialPulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.6; }
-        }
-      `}</style>
-    </>
+    </div>
   )
 }

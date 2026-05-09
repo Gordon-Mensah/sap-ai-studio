@@ -92,10 +92,6 @@ function OrchestratorCanvas() {
       setIsFirstTime(true)
       setApiKeyModalOpen(true)
     }
-    // Show tutorial on first visit
-    if (!localStorage.getItem('sap_studio_toured')) {
-      setTimeout(() => setShowTutorial(true), 800)
-    }
   }, [])
 
   const showToast = (msg: string) => {
@@ -298,7 +294,13 @@ runPipeline("Your input here").then(console.log)`
       {apiKeyModalOpen && (
         <ApiKeyModal
           isFirstTime={isFirstTime}
-          onSave={() => { setApiKeyModalOpen(false); showToast('✓ API key saved') }}
+          onSave={() => {
+            setApiKeyModalOpen(false)
+            showToast('✓ API key saved')
+            if (isFirstTime && !localStorage.getItem('sap_studio_toured')) {
+              setTimeout(() => setShowTutorial(true), 400)
+            }
+          }}
           onClose={isFirstTime ? undefined : () => setApiKeyModalOpen(false)}
         />
       )}
